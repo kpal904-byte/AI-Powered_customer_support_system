@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     # -------------------------
     # Embedding Configuration
     # -------------------------
-    EMBEDDING_MODEL: str = "text-embedding-3-small"
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     # -------------------------
     # RAG Configuration

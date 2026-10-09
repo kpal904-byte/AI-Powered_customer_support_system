@@ -13,18 +13,19 @@ def should_escalate(
     confidence: float = 1.0
 ) -> bool:
     """
-    Decide whether a query should be escalated.
+    Decide whether a request needs human support.
     """
 
+    # Explicit high-priority requests go to human support.
     if priority.lower() == "high":
         return True
 
+    # These intents currently use conservative escalation.
     if intent in HIGH_PRIORITY_INTENTS:
         return True
 
-    if confidence < 0.50:
-        return True
-
+    # Do not escalate solely because of a low
+    # classifier confidence score in this prototype.
     return False
 
 

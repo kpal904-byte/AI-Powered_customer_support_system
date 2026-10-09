@@ -1,17 +1,24 @@
 from sentence_transformers import SentenceTransformer
 
+from src.config.settings import settings
+
 
 class EmbeddingModel:
     """
-    Wrapper around Sentence Transformer embedding model.
+    Wrapper around the Sentence Transformer embedding model.
     """
 
     def __init__(
         self,
-        model_name: str = "sentence-transformers/all-MiniLM-L6-v2"
+        model_name: str | None = None
     ):
-        self.model_name = model_name
-        self.model = SentenceTransformer(model_name)
+        self.model_name = (
+            model_name or settings.EMBEDDING_MODEL
+        )
+
+        self.model = SentenceTransformer(
+            self.model_name
+        )
 
     def encode_documents(
         self,
@@ -32,7 +39,7 @@ class EmbeddingModel:
         query: str
     ):
         """
-        Generate embedding for a user query.
+        Generate embedding for a query.
         """
 
         return self.model.encode(
@@ -45,19 +52,12 @@ if __name__ == "__main__":
 
     embedding_model = EmbeddingModel()
 
-    texts = [
-        "How can I request a refund?",
-        "My laptop is overheating."
-    ]
-
-    embeddings = embedding_model.encode_documents(texts)
-
-    print("\nEmbedding shape:")
-    print(embeddings.shape)
-
-    query_embedding = embedding_model.encode_query(
-        "I want my money back"
+    embeddings = embedding_model.encode_documents(
+        [
+            "How can I request a refund?",
+            "My laptop is overheating."
+        ]
     )
 
-    print("\nQuery embedding shape:")
-    print(query_embedding.shape)
+    print("Embedding shape:")
+    print(embeddings.shape)
