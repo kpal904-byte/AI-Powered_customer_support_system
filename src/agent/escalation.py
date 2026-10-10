@@ -7,26 +7,26 @@ HIGH_PRIORITY_INTENTS = {
 }
 
 
+
 def should_escalate(
     intent: str,
     priority: str = "medium",
     confidence: float = 1.0
 ) -> bool:
-    """
-    Decide whether a request needs human support.
-    """
+    """Decide whether a request needs human support."""
 
-    # Explicit high-priority requests go to human support.
     if priority.lower() == "high":
         return True
 
-    # These intents currently use conservative escalation.
-    if intent in HIGH_PRIORITY_INTENTS:
+    if intent.lower() in HIGH_PRIORITY_INTENTS:
         return True
 
-    # Do not escalate solely because of a low
-    # classifier confidence score in this prototype.
+    # Escalate when intent confidence is too low.
+    # Do not escalate ordinary questions only because confidence is low.
+    # Let the RAG pipeline try to answer them.
+
     return False
+
 
 
 def escalate_to_human(
